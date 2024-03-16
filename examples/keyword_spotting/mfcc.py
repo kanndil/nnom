@@ -8,6 +8,8 @@ import numpy as np
 import os
 import random
 
+from mfcc_fix import *
+
 def load_noise(path='dat/_background_noise_/'):
     noise = []
     files = os.listdir(path)
@@ -20,6 +22,7 @@ def load_noise(path='dat/_background_noise_/'):
         noise.append(sig)
     return  noise
 
+count_number_of_mfccs = 0
 def generate_mfcc(sig, rate, sig_len, noise=None, noise_weight=0.1, winlen=0.032, winstep=0.032/2, numcep=13, nfilt=26, nfft=512, lowfreq=20, highfreq=4000, winfunc=np.hanning, ceplifter=0, preemph=0.97):
     if(len(sig) != sig_len):
         if(len(sig)< sig_len):
@@ -27,17 +30,44 @@ def generate_mfcc(sig, rate, sig_len, noise=None, noise_weight=0.1, winlen=0.032
         if(len(sig) >sig_len):
             sig = sig[0:sig_len]
     # i dont know, 'tensorflow' normalization
-    sig = sig.astype('float32') / 32768
+    sig = sig.astype('float32') / 32768    
     if(noise is not None):
-        noise = noise[random.randint(0, len(noise)-1)] # pick a noise
-        start = random.randint(0, len(noise)-sig_len) # pick a sequence
+        noise = noise[random.randint(0, len(noise)-1)] # pick a noise 
+        start = random.randint(0, len(noise)-sig_len)  # pick a sequence 
         noise = noise[start:start+sig_len]
         noise = noise.astype('float')/32768
         sig = sig * (1-noise_weight) + noise * noise_weight
-        #wav.write('noise_test.wav', rate, sig)
+        # wav.write('noise_test.wav', rate, sig)
+        
     mfcc_feat = mfcc(sig, rate, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq,
                      highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
     mfcc_feat = mfcc_feat.astype('float32')
+    global count_number_of_mfccs
+    count_number_of_mfccs+=1
+    print(count_number_of_mfccs)
+    return mfcc_feat
+
+def generate_mfcc_fix(sig, rate, sig_len, noise=None, noise_weight=0.1, winlen=0.032, winstep=0.032/2, numcep=13, nfilt=26, nfft=512, lowfreq=20, highfreq=4000, winfunc=np.hanning, ceplifter=0, preemph=0.97):
+    if(len(sig) != sig_len):
+        if(len(sig)< sig_len):
+            sig = np.pad(sig, (0, sig_len - len(sig)), 'constant')
+        if(len(sig) >sig_len):
+            sig = sig[0:sig_len]
+
+    if(noise is not None):
+        noise = noise[random.randint(0, len(noise)-1)] # pick a noise 
+        start = random.randint(0, len(noise)-sig_len)  # pick a sequence 
+        noise = noise[start:start+sig_len]
+        sig = sig * (1-noise_weight) + noise * noise_weight
+        # wav.write('noise_test.wav', rate, sig)
+    mfcc_create(mfcc_fix, MFCC_COEFFS_LEN, MFCC_COEFFS_FIRST, 26, AUDIO_FRAME_LEN, 0.97, 1)
+    process_audio_data(sig)
+    mfcc_feat = mfcc_features
+    
+    mfcc_feat = mfcc_feat.astype('float32')
+    global count_number_of_mfccs
+    count_number_of_mfccs+=1
+    print(count_number_of_mfccs)
     return mfcc_feat
 
 def merge_mfcc_file(input_path='dat/', mix_noise=True, sig_len=16000, winlen=0.032, winstep=0.032/2, numcep=13, nfilt=26, nfft=512,
@@ -76,7 +106,7 @@ def merge_mfcc_file(input_path='dat/', mix_noise=True, sig_len=16000, winlen=0.0
                     (rate, sig) = wav.read(f)
                     for i in range(0, len(sig), sig_len):
                         
-                        data = generate_mfcc(sig[i:i+sig_len], rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep,
+                        data = generate_mfcc_fix(sig[i:i+sig_len], rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep,
                                              nfilt=nfilt, nfft=nfft, lowfreq=lowfreq,
                                              highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                         data = np.array(data)  # ?? no idea why this works
@@ -94,19 +124,19 @@ def merge_mfcc_file(input_path='dat/', mix_noise=True, sig_len=16000, winlen=0.0
                 # split dataset into train, test, validate
                 
                 if filename in test_list:
-                    data = generate_mfcc(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     
                     test_data.append(data)
                     test_label.append(label)
                 
                 elif filename in validate_list:
-                    data = generate_mfcc(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     validate_data.append(data)
                     validate_label.append(label)
                 else:
-                    data = generate_mfcc(sig, rate, sig_len, noise=noise, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix (sig, rate, sig_len, noise=noise, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     train_data.append(data)
                     train_lable.append(label)

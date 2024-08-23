@@ -116,11 +116,11 @@ def main():
 
 
     # label: the selected label will be recognised, while the others will be classified to "unknow". 
-    #selected_lable = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
+    selected_lable = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
     #selected_lable = ['marvin', 'sheila', 'yes', 'no', 'left', 'right', 'forward', 'backward', 'stop', 'go']
-    selected_lable = ['backward', 'bed', 'bird', 'cat', 'dog', 'down', 'eight','five', 'follow', 'forward',
-                      'four','go','happy','house','learn','left','marvin','nine','no','off','on','one','right',
-                      'seven','sheila','six','stop','three','tree','two','up','visual','yes','zero']
+    # selected_lable = ['backward', 'bed', 'bird', 'cat', 'dog', 'down', 'eight','five', 'follow', 'forward',
+    #                   'four','go','happy','house','learn','left','marvin','nine','no','off','on','one','right',
+    #                   'seven','sheila','six','stop','three','tree','two','up','visual','yes','zero']
 
     # parameters
     epochs = 20

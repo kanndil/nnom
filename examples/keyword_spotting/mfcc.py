@@ -106,7 +106,7 @@ def merge_mfcc_file(input_path='dat/', mix_noise=True, sig_len=16000, winlen=0.0
                     (rate, sig) = wav.read(f)
                     for i in range(0, len(sig), sig_len):
                         
-                        data = generate_mfcc(sig[i:i+sig_len], rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep,
+                        data = generate_mfcc_fix(sig[i:i+sig_len], rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep,
                                              nfilt=nfilt, nfft=nfft, lowfreq=lowfreq,
                                              highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                         data = np.array(data)  # ?? no idea why this works
@@ -124,19 +124,19 @@ def merge_mfcc_file(input_path='dat/', mix_noise=True, sig_len=16000, winlen=0.0
                 # split dataset into train, test, validate
                 
                 if filename in test_list:
-                    data = generate_mfcc(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     
                     test_data.append(data)
                     test_label.append(label)
                 
                 elif filename in validate_list:
-                    data = generate_mfcc(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix(sig, rate, sig_len, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     validate_data.append(data)
                     validate_label.append(label)
                 else:
-                    data = generate_mfcc(sig, rate, sig_len, noise=noise, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
+                    data = generate_mfcc_fix (sig, rate, sig_len, noise=noise, winlen=winlen, winstep=winstep, numcep=numcep, nfilt=nfilt, nfft=nfft, lowfreq=lowfreq, highfreq=highfreq, winfunc=winfunc, ceplifter=ceplifter, preemph=preemph)
                     data = np.array(data) # ?? no idea why this works
                     train_data.append(data)
                     train_lable.append(label)

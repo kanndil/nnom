@@ -11,8 +11,6 @@
 
 import matplotlib.pyplot as plt
 import os
-nnscript = os.path.abspath('../../scripts')
-os.sys.path.append(nnscript)
 
 from tensorflow.keras import *
 from tensorflow.keras.datasets import mnist
@@ -238,7 +236,7 @@ def main():
     os.system(cmd)
     try:
         # get NNoM results
-        result = np.genfromtxt('result.csv', delimiter=',', dtype=np.int, skip_header=1)
+        result = np.genfromtxt('result.csv', delimiter=',', dtype=np.int32, skip_header=1)
         result = result[:,0]        # the first column is the label, the second is the probability
         label = y_test_original[:len(y_test)].flatten()     # use the original numerical label
         acc = np.sum(result == label).astype('float32')/len(result)

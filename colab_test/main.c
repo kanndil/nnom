@@ -162,8 +162,8 @@ int main(void)
     FILE * ground_truth_f;
     
     // Open files for reading audio data and ground truth labels
-    file = fopen ("Colab_test_Audio/test_x.bin","r"); //the audio data stored in a textfile
-    ground_truth_f = fopen ("Colab_test_Audio/test_y.bin","r"); //the ground truth textfile
+    file = fopen ("Colab_Test_Audio/test_x.bin","r"); //the audio data stored in a textfile
+    ground_truth_f = fopen ("Colab_Test_Audio/test_y.bin","r"); //the ground truth textfile
     // Read ground truth labels from file into an array
     for (int j = 0; fscanf(ground_truth_f, "%s", ground_truth[j++]) != EOF;) ;
     fclose (ground_truth_f);

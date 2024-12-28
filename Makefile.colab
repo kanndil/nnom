@@ -1,0 +1,18 @@
+CC = gcc
+CFLAGS = -Iinc -Isrc -Iport -Icolab_test -Ioutput
+SRCS = colab_test/main.c colab_test/mfcc.c $(wildcard src/layers/*.c) $(wildcard src/core/*.c) $(wildcard src/backends/*.c)
+OBJS = $(SRCS:.c=.o)
+TARGET = main
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean

@@ -19,3 +19,4 @@ examples/uci-har-rnn/weights.h
 examples/uci-har-rnn/model.exe
 examples/auto_test/mnist
 examples/rnn-denoise/rnn_denoise*
+main

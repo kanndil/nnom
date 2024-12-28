@@ -161,18 +161,15 @@ int main(void)
     FILE * file;
     FILE * ground_truth_f;
     
-    printf("Starting KWS\n");
     // Open files for reading audio data and ground truth labels
-    file = fopen ("Test_Audio/test_x.txt","r"); //the audio data stored in a textfile
-    printf("Starting KWS\n");
-    ground_truth_f = fopen ("Test_Audio/test_y.txt","r"); //the ground truth textfile
-printf("Starting KWS\n");
+    file = fopen ("Colab_test_Audio/test_x.bin","r"); //the audio data stored in a textfile
+    ground_truth_f = fopen ("Colab_test_Audio/test_y.bin","r"); //the ground truth textfile
     // Read ground truth labels from file into an array
     for (int j = 0; fscanf(ground_truth_f, "%s", ground_truth[j++]) != EOF;) ;
     fclose (ground_truth_f);
-printf("Starting KWS\n");
     int one_audio_data[16000];
-printf("Starting KWS\n");
+
+
 
     // Main loop for processing audio samples and performing inference
     while (1)
